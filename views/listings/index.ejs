@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Listing</h1>
+    <form action="/listings/new" method="GET">
+        <button>Create Listing</button>
+    </form>
+    <ul>
+        
+        <% for(let user of users){%>
+            <a href="/listing/<%= user._id %>">
+                <li>
+                    <%= user.title %>
+                </li>
+            </a>
+            <% } %>
+    </ul>
+</body>
+
+</html>
