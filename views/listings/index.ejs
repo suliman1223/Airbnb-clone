@@ -1,18 +1,40 @@
 <% layout('/layouts/boilerplate') -%>
 
-<body>
-    <h1>Listing</h1>
-    <form action="/listings/new" method="GET">
-        <button>Create Listing</button>
-    </form>
-    <ul>
-        
-        <% for(let user of users){%>
-            <a href="/listing/<%= user._id %>">
-                <li>
-                    <%= user.title %>
-                </li>
-            </a>
-            <% } %>
-    </ul>
-</body>
+    <body>
+       
+        <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 g-4 mt-3">
+            <% for(let user of users){%>
+                
+                <div class="card" >
+                    <a href="/listing/<%= user._id %>">
+                        <img src="<%= user.image %>" class="card-img-top" alt="listing image" style="height: 18rem;" >
+                    </a>
+                    <div class="card-body">
+                        <p class="card-text">
+                            <b>
+                                <%= user.title %>
+                            </b>
+
+                            <br>
+                           
+
+
+                                <%= user.location %> <i class="fa-solid fa-location-crosshairs"></i> &nbsp; &nbsp; <%=
+                                        user.country %>
+                                        <br>
+                                        Price: $<%= user.price.toLocaleString("en-US") %>/night
+                                            <br>
+                                            <!-- <button type="button" class="btn btn-outline-primary"
+                                                style="margin-bottom: 0.7rem;"><a href="/listing/<%= user._id %>"
+                                                    style="text-decoration: none; color: inherit;">
+                                                    View Details
+                                                </a></button> -->
+
+                        </p>
+                    </div>
+
+                </div>
+                <% } %>
+        </div>
+
+    </body>

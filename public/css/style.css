@@ -1,3 +1,73 @@
 body{
-    background-color:pink;
+    background-color:white;
+    display:flex;
+    flex-direction:column;
+    height:100vh;
+}
+.container{
+    flex:1;
+}
+.navbar{
+    height:5rem;
+    background-color:white;
+}
+.fa-compass{
+    color:rgb(220, 44, 44);
+    font-size:2rem;
+}
+.nav-link{
+    color:#222222;
+    
+}
+.f-info-links a{
+    text-decoration:none;
+    color:#222222;
+}
+.f-info-links a:hover{
+    text-decoration:underline;
+}
+
+.f-info{
+    padding:1rem;
+    background-color: #ebebeb;
+    display:flex;
+    justify-content:center;
+    align-items:space-evenly;
+    flex-wrap:wrap;
+    height:8rem;
+    text-align:center;
+}
+.f-info-special{
+    width:100%;
+    font-size:1.2rem;
+}
+.f-info-links{
+    width:100%;
+}
+.f-info-special i{
+   margin-right:0.5rem;
+}
+
+.card{
+    border:none !important;
+    margin-bottom:2rem !important;
+}
+.card-img-top{
+   
+    object-fit:cover !important;
+    border-radius:1rem !important;
+    width:100% !important;
+
+
+}
+.card-body{
+    padding:0 !important;
+}
+.card-body p{
+    font-weight:380 !important;
+}
+.card-img-top-show{
+    height:30vh !important;
+    object-fit:cover !important;
+    border-radius: 1.5rem;
 }

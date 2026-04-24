@@ -1,17 +1,41 @@
 <% layout('/layouts/boilerplate') -%>
-<body>
-    <h1>Show Details</h1>
-    <ul>
-        <li>Title: <%= user.title %></li>
-        <li>Price: $<%= user.price.toLocaleString("en-US") %></li>
-        <li>Description: <%= user.description %></li>
-        <li>Location: <%= user.location %></li> 
-        <li>country: <%= user.country %></li>
 
-    </ul>
-    <a href="/listings/<%= user._id %>/edit">Edit Listing</a>
-    <form action="/listings/<%= user._id %>?_method=DELETE" method="POST" style="display:inline;">
-        <button>Delete Listing</button>
-    </form>
+    <body>
+        <div class="row">
+            <div class="col-8 offset-2">
+               <h1>Show Details</h1>
+               <br>
+               
+                <a href="/listings/<%= user._id %>/edit" text-decoration: none;">Edit Listing</a>
+                <form action="/listings/<%= user._id %>?_method=DELETE" method="POST" style="display:inline;">
+                    <button class="btn btn-danger">Delete Listing</button>
+                    <br><br>
+                </form>
+            </div>
+            
+            <div class="card col-6 offset-2">
+                <img src="<%= user.image %>" class="card-img-top-show" alt="listing image">
+                <div class="car-body">
+                    <p class="card-text"><b>
+                            <%= user.title %>
+                        </b><br>
+                        <%= user.description %><br>
+                            $<%= user.price.toLocaleString("en-US") %><br>
+                                <%= user.location %><br>
+                                    <%= user.country %>
 
-</body>
+
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            
+        </div>
+
+
+    </body>
