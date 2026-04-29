@@ -3,26 +3,27 @@
     <body>
         <div class="row">
             <div class="col-8 offset-2">
-               <h1>Show Details</h1>
-               <br>
-               
+                <h1>
+                    <%= user.title %>
+                </h1>
+                <br>
+
                 <a href="/listings/<%= user._id %>/edit" text-decoration: none;">Edit Listing</a>
                 <form action="/listings/<%= user._id %>?_method=DELETE" method="POST" style="display:inline;">
                     <button class="btn btn-danger">Delete Listing</button>
                     <br><br>
                 </form>
             </div>
-            
+
             <div class="card col-6 offset-2">
                 <img src="<%= user.image %>" class="card-img-top-show" alt="listing image">
                 <div class="car-body">
                     <p class="card-text"><b>
-                            <%= user.title %>
-                        </b><br>
-                        <%= user.description %><br>
-                            $<%= user.price.toLocaleString("en-US") %><br>
-                                <%= user.location %><br>
-                                    <%= user.country %>
+
+                            <%= user.description %><br>
+                                $<%= user.price.toLocaleString("en-US") %><br>
+                                    <%= user.location %><br>
+                                        <%= user.country %>
 
 
 
@@ -34,7 +35,53 @@
 
 
 
-            
+
+        </div>
+
+        <div class="col-8 offset-2 mt-3 mb-3">
+            <h1>Leave a Review</h1>
+            <div class="mt-3">
+                <form action="/listing/<%= user._id %>/reviews" method="post" novalidate class="needs-validation">
+                    <div class="mt-3">
+                        <label for="rating" class="form-label">Rating</label>
+                        <input type="range" name="review[rating]" min="1" max="5" id="rating" class="form-range">
+                    </div>
+                    <div class="mt-3 mb-3">
+                        <label for="comment" class="form-label">Comment:</label>
+                        <textarea name="review[comment]" cols="80" rows="4" id="comment" class="form-control"
+                            required></textarea>
+                        <div class="invalid-feedback">please enter the comment</div>
+                    </div>
+
+                    <button class="btn btn-outline-dark" type="submit">Submit</button>
+                </form>
+                <div>
+                    <p><b>All Reviews</b></p>
+                    <div class="row fsds">
+
+                        <%for (const element of user.reviews) {%>
+                            <div class="card col-5 ms-3 mb-3">
+                                <div class="card-body">
+                                    <h5 class="card-title">John Doe</h5>
+                                    <p class="card-text">
+                                        <%= element.comment %>
+                                    </p>
+                                    <p class="card-text">
+                                        <%= element.rating %><i class="fa-solid fa-star"></i>
+                                    </p>
+                                    <form method="post" action="/listing/<%= user._id %>/reviews/<%= element._id %>?_method=delete">
+                                        <button class="btn btn-sm btn-danger">Delete</button>
+                                    </form>
+                                </div>
+
+                            </div>
+
+                            <% }%>
+
+                    </div>
+                </div>
+            </div>
+
         </div>
 
 

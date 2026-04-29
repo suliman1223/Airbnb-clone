@@ -71,3 +71,9 @@ body{
     object-fit:cover !important;
     border-radius: 1.5rem;
 }
+.fsds{
+    border: 1px solid black ;
+    border-radius: 3rem;
+    padding: 2rem 1rem 2rem 1rem;
+    
+}
