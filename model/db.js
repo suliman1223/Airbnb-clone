@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const Reviews=require('./review');
+const Reviews = require('./review');
 const userSchema = new Schema({
     title: {
         type: String,
@@ -9,30 +9,36 @@ const userSchema = new Schema({
     description: {
         type: String
     },
-    
-    image: {
-        type: String,
-        default:"https://unsplash.com/photos/man-petting-a-dog-with-boxes-in-background-TXdLi87NmJQ",
-        set:(v) => v === "" ? "https://unsplash.com/photos/man-petting-a-dog-with-boxes-in-background-TXdLi87NmJQ" : v,
-    },
+
+   image: {
+    type: String,
+
+    default:
+        "https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=1000&auto=format&fit=crop",
+
+    set: (v) =>
+        v === ""
+            ? "https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=1000&auto=format&fit=crop"
+            : v,
+},
     price: Number,
     location: String,
     country: String,
-    reviews:[
+    reviews: [
         {
-            type:Schema.Types.ObjectId,
-            ref:"Reviews"
+            type: Schema.Types.ObjectId,
+            ref: "Reviews"
         }
     ],
-    owner:{
-        type:Schema.Types.ObjectId,
-        required:true,
-        ref:"Player"
+    owner: {
+        type: Schema.Types.ObjectId,
+        required: true,
+        ref: "Player"
     },
 });
-userSchema.post('findOneAndDelete',async(data)=>{
-    await Reviews.deleteMany({_id:{$in:data.reviews}});
-    
+userSchema.post('findOneAndDelete', async (data) => {
+    await Reviews.deleteMany({ _id: { $in: data.reviews } });
+
 
 })
 
