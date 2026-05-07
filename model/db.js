@@ -20,10 +20,15 @@ const userSchema = new Schema({
     country: String,
     reviews:[
         {
-            type:mongoose.Types.ObjectId,
+            type:Schema.Types.ObjectId,
             ref:"Reviews"
         }
     ],
+    owner:{
+        type:Schema.Types.ObjectId,
+        required:true,
+        ref:"Player"
+    },
 });
 userSchema.post('findOneAndDelete',async(data)=>{
     await Reviews.deleteMany({_id:{$in:data.reviews}});

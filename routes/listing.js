@@ -2,7 +2,7 @@ const express=require('express');
 const router=express.Router();
 const wrapAsync = require('../utils/wrapAsync.js');
 
-const {isLoggedIn}=require('../middleware/middleware.js');
+const {isLoggedIn,isOwner,isReviewAuthor}=require('../middleware/middleware.js');
 const ExpressError = require('../utils/ExpressError.js');
 const { userListingSchema,reviewSchema } = require('../Schema.js');
 const flash=require('connect-flash');
@@ -41,7 +41,7 @@ router.get('/', async (req, res) => {
 router.get('/new', isLoggedIn,(req, res) => {
     res.render("listings/new");
 });
-router.get('/:id/edit', isLoggedIn,async (req, res) => {
+router.get('/:id/edit', isLoggedIn,isOwner,async (req, res) => {
     const { id } = req.params;
     const user = await User.findById(id);
     res.render("listings/edit", { user: user });
@@ -51,25 +51,43 @@ router.get('/:id/edit', isLoggedIn,async (req, res) => {
 
 router.get('/:id', async (req, res) => {
     const { id } = req.params;
-    const user = await User.findById(id).populate("reviews");
+   const user = await User.findById(id)
+    .populate({
+        path: "reviews",
+        populate: {
+            path: "author"
+        }
+    })
+    .populate("owner");
     if (!user) {
         return res.status(404).send("User not found");
     }
+    console.log(user);
     res.render("listings/show", { user });
 });
-router.post('/', validateListings,wrapAsync(async (req, res) => {
+router.post('/', isLoggedIn, validateListings,wrapAsync(async (req, res) => {
     const { title, price, image, description, location, country } = req.body;
-    const newUser = new User({ title, price, image, description, location, country });
+    const newUser = new User({
+        title,
+        price,
+        image,
+        description,
+        location,
+        country,
+        owner: req.user._id
+    });
     await newUser.save();
      req.flash('success',"user Created Successfully");
     res.redirect('/listing');
 
 }));
-router.post('/:id/reviews',validateReviews,wrapAsync(async(req,res)=>{
+router.post('/:id/reviews',isLoggedIn,validateReviews,wrapAsync(async(req,res)=>{
     const listId=req.params.id;
     
     const listing=await User.findById(listId);
     const newReview=new Reviews(req.body.review);
+    newReview.author=req.user._id;
+    console.log(newReview);
     await listing.reviews.push(newReview);
     await newReview.save();
     await listing.save();
@@ -78,7 +96,7 @@ router.post('/:id/reviews',validateReviews,wrapAsync(async(req,res)=>{
     res.redirect(`/listing/${listId}`);
 
 }))
-router.delete('/:id/reviews/:idk',isLoggedIn,wrapAsync(async(req,res)=>{
+router.delete('/:id/reviews/:idk',isLoggedIn,isReviewAuthor,wrapAsync(async(req,res)=>{
     
     let id=req.params.id;
     let reviewId=req.params.idk;
@@ -89,18 +107,19 @@ router.delete('/:id/reviews/:idk',isLoggedIn,wrapAsync(async(req,res)=>{
     res.redirect(`/listing/${id}`);
 
 }));
-router.put('/:id',validateListings,isLoggedIn,wrapAsync (async (req, res) => {
+router.put('/:id',validateListings,isLoggedIn,isOwner,wrapAsync (async (req, res) => {
     const { id } = req.params;
     const { title, price, image, description, location, country } = req.body;
+ 
     const user = await User.findByIdAndUpdate(id, { title, price, image, description, location, country }, { new: true });
     if (!user) {
         return res.status(404).send("User not found");
     }
     req.flash('success',"Updated Listing");
-    res.redirect(`/listing`);
+    res.redirect(`/listing/${id}`);
 }));
 
-router.delete('/:id',isLoggedIn, async (req, res) => {
+router.delete('/:id',isLoggedIn,isOwner ,async (req, res) => {
     const { id } = req.params;
     const user = await User.findByIdAndDelete(id);
     if (!user) {

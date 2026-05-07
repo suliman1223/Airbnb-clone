@@ -1,3 +1,4 @@
+const { required } = require('joi');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const reviewSchema=new Schema({
@@ -10,6 +11,11 @@ const reviewSchema=new Schema({
     createdAt:{
         type:Date,
         default:Date.now()
+    },
+    author:{
+        type:mongoose.Types.ObjectId,
+       
+        ref:'Player'
     }
 });
 module.exports=mongoose.model("Reviews",reviewSchema);
