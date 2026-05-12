@@ -9,7 +9,7 @@
                 
                 <div class="card" >
                     <a href="/listing/<%= user._id %>">
-                        <img src="<%= user.image %>" class="card-img-top" alt="listing image" style="height: 18rem;" >
+                        <img src="<%= user.image.path || user.image %>" class="card-img-top" alt="listing image" style="height: 18rem;" >
                     </a>
                     <div class="card-body">
                         <p class="card-text">

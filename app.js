@@ -1,3 +1,8 @@
+if(process.env.NODE_ENV !== "production"){
+require('dotenv').config();
+
+}
+console.log(process.env.SECRETE_KEY);
 const express = require('express');
 const app = express();
 const port = 3000;
@@ -16,11 +21,13 @@ const flash=require('connect-flash');
 const passport=require('passport');
 const localStrategy=require('passport-local');
 const Player=require('./model/user.js');
+const multer  = require('multer')
+
 app.engine("ejs", ejsMate);
 
 app.use(methodOverride('_method'));
 const sessionOptions = {
-    secret: "mySecreteCode",
+    secret: process.env.SECRETE_KEY,
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -85,6 +92,7 @@ app.use((req, res, next) => {
 
 app.use((error, req, res, next) => {
     let { status = 500, message = "Something went wrong" } = error;
+    console.error(error);
     return res.status(status).render("error.ejs", { message });
 
 });

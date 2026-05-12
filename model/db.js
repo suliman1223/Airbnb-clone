@@ -11,15 +11,8 @@ const userSchema = new Schema({
     },
 
    image: {
-    type: String,
-
-    default:
-        "https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=1000&auto=format&fit=crop",
-
-    set: (v) =>
-        v === ""
-            ? "https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=1000&auto=format&fit=crop"
-            : v,
+   fileName: String,
+   path: String
 },
     price: Number,
     location: String,

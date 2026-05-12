@@ -20,7 +20,7 @@ module.exports.IsById = async (req, res) => {
 
 }
 module.exports.newPage = (req, res) => {
-    console.log("New page")
+    
     res.render("listings/new");
 }
 
@@ -41,22 +41,31 @@ module.exports.showPage = async (req, res) => {
     res.render("listings/show", { user });
 }
 
-module.exports.addnewDetails=async (req, res) => {
-    const { title, price, image, description, location, country } = req.body;
+module.exports.createListing=async (req, res) => {
+    const { title, price, description, location, country } = req.body;
     const newUser = new User({
         title,
         price,
-        image,
         description,
         location,
         country,
         owner: req.user._id
     });
+
+    if (req.file) {
+        const url = req.file.path;
+        const fileName = req.file.filename;
+        console.log("URL:", url, "File Name:", fileName);
+        newUser.image = { path: url, fileName: fileName };
+    }
+
     await newUser.save();
      req.flash('success',"user Created Successfully");
     res.redirect('/listing');
 
 }
+
+module.exports.addnewDetails = module.exports.createListing;
 
 module.exports.reviewDetails=async(req,res)=>{
     const listId=req.params.id;
@@ -64,7 +73,7 @@ module.exports.reviewDetails=async(req,res)=>{
     const listing=await User.findById(listId);
     const newReview=new Reviews(req.body.review);
     newReview.author=req.user._id;
-    console.log(newReview);
+    
     await listing.reviews.push(newReview);
     await newReview.save();
     await listing.save();

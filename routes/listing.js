@@ -4,6 +4,11 @@ const wrapAsync = require('../utils/wrapAsync.js');
 const {isLoggedIn,isOwner,isReviewAuthor}=require('../middleware/middleware.js');
 const ExpressError = require('../utils/ExpressError.js');
 const { userListingSchema,reviewSchema } = require('../Schema.js');
+const multer  = require('multer');
+
+const { storage } = require('../cloudConfig.js');
+
+const upload = multer({ storage });
 
 const controllerListing=require('../controllers/listing.js');
 
@@ -26,7 +31,9 @@ const validateReviews=(req,res,next)=>{
 }
 router.route('/')
 .get(wrapAsync(controllerListing.index))
-.post( isLoggedIn, validateListings,wrapAsync(controllerListing.addnewDetails));
+.post(isLoggedIn, upload.single('image'),validateListings,
+wrapAsync(controllerListing.createListing));
+        
 router.get('/new', isLoggedIn,controllerListing.newPage);
 
 router.route('/:id')
